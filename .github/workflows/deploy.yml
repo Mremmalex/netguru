@@ -3,6 +3,8 @@ name: Nodejs CI
 on:
   push:
     branches: [main]
+    path:
+      - "movie-service/**"
 
   jobs:
     test:
