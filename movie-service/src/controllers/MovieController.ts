@@ -13,11 +13,13 @@ export async function post_movie_handler(req: Request, res: Response) {
 		let userExpDate: Date = new Date(decoded.exp);
 		let currentDate: Date = new Date();
 
-		currentDate.setMonth(currentDate.getMonth() - 1);
+		currentDate.setMonth(currentDate.getMonth());
+		console.log(userExpDate)
+		console.log(currentDate)
 
 		const movies = await Movie.find({ userId: decoded.userId });
 
-		if (userExpDate > currentDate) {
+		if (userExpDate >= currentDate) {
 			if (movies.length == 5) {
 				return res.status(200).json({
 					message: "you have exceded the number of slot alocated to you",
@@ -37,8 +39,8 @@ export async function post_movie_handler(req: Request, res: Response) {
 						director: data.Director,
 					});
 					return res.status(200).json({ action: "ok", data: movie });
-				} catch (error) {
-					return res.status(500).json({ error });
+				} catch (error: any) {
+					return res.status(500).json({ error: error.message });
 				}
 			}
 		} else {
@@ -62,8 +64,8 @@ export async function post_movie_handler(req: Request, res: Response) {
 					director: data.Director,
 				});
 				return res.status(200).json({ action: "ok", data: movie });
-			} catch (error) {
-				return res.status(500).json({ error });
+			} catch (error: any) {
+				return res.status(500).json({ error: error.message });
 			}
 		}
 	}
