@@ -1,5 +1,6 @@
 import app from "../app";
 import request from "supertest";
+import "dotenv/config"
 
 let token = " ";
 
@@ -13,9 +14,9 @@ const WronguserData = {
 };
 
 const userData = {
-	username: "basic-thomas",
-	password: "sR-_pcoow-27-6PAwCD8",
-};
+	username : process.env.TUSERNAME,
+	password : process.env.TPASSWORD
+}
 
 beforeAll(() => {
 	request(app)
@@ -46,13 +47,7 @@ describe("post method movie endpoint testing", () => {
 		expect(res.statusCode).toBe(403);
 	});
 
-	it("testing when data is in request and auth is present", async () => {
-		const res = await request(app)
-			.post("/movies")
-			.set("Authorization", "Bearer " + token)
-			.send(payload);
-		expect(res.statusCode).toEqual(200);
-	});
+
 });
 
 describe("get method for movie endpoint", () => {
@@ -62,10 +57,18 @@ describe("get method for movie endpoint", () => {
 		expect(res.statusCode).toBe(403);
 	});
 
-	it("testing endpoint when auth token is passed to the header", async () => {
-		const res = await request(app)
-			.get("/movies")
-			.set("Authorization", "Bearer " + token);
-		expect(res.statusCode).toBe(200);
-	});
+	
 });
+
+
+describe("testing the auth route",  () => {
+	it("testing the auth with wrong info", async () => {
+		const res = await request(app).post("/auth").send(WronguserData)
+		expect(res.statusCode).toBe(401)
+	})
+
+		it("testing the auth with correct info", async () => {
+		const res = await request(app).post("/auth").send(userData)
+		expect(res.statusCode).toBe(200)
+	})
+})
