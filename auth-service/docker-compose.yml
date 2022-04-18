@@ -1,6 +1,7 @@
 version: "3.2"
 services:
   app:
+    container_name: auth
     command: node src/server.js
     build:
       context: .
