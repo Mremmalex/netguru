@@ -14,8 +14,8 @@ export async function post_movie_handler(req: Request, res: Response) {
 		let currentDate: Date = new Date();
 
 		currentDate.setMonth(currentDate.getMonth());
-		console.log(userExpDate)
-		console.log(currentDate)
+		console.log(userExpDate);
+		console.log(currentDate);
 
 		const movies = await Movie.find({ userId: decoded.userId });
 
@@ -40,7 +40,7 @@ export async function post_movie_handler(req: Request, res: Response) {
 					});
 					return res.status(200).json({ action: "ok", data: movie });
 				} catch (error: any) {
-					return res.status(500).json({ error: error.message });
+					return res.status(400).json({ error: error.message });
 				}
 			}
 		} else {
@@ -65,7 +65,7 @@ export async function post_movie_handler(req: Request, res: Response) {
 				});
 				return res.status(200).json({ action: "ok", data: movie });
 			} catch (error: any) {
-				return res.status(500).json({ error: error.message });
+				return res.status(400).json({ error: error.message });
 			}
 		}
 	}
@@ -79,22 +79,5 @@ export async function get_post_handler(req: Request, res: Response) {
 		return res.status(200).json({ action: "ok", data: movies });
 	} catch (error: any) {
 		return res.status(500).json({ error: error.message });
-	}
-	return;
-}
-
-export async function auth_user_handler(req: Request, res: Response) {
-	const { username, password } = req.body;
-	if (!username && !password)
-		return res.status(403).json({ message: "no payload" });
-	try {
-		const resData: AxiosResponse<any, any> = await axios.post(auth_url, {
-			username,
-			password,
-		});
-		const token = await resData.data.token;
-		return res.status(200).json({ token });
-	} catch (error) {
-		return res.status(401).json({ message: "user does not exits" });
 	}
 }

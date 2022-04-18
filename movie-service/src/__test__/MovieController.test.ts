@@ -53,7 +53,6 @@ describe("post method movie endpoint testing", () => {
 describe("get method for movie endpoint", () => {
 	it("testing endpoint when no auth token is passed into header", async () => {
 		const res = await request(app).get("/movies");
-
 		expect(res.statusCode).toBe(403);
 	});
 
